@@ -10,8 +10,7 @@ module.exports = function (grunt) {
 	function compile(job) {
 		var source = grunt.file.read(job.src);
 		var output = es6now.translate(source, job.options);
-		var dest = path.join(job.dest, path.basename(job.src));
-		grunt.file.write(dest, output);
+		grunt.file.write(job.dest, output);
 	}
 
 	grunt.registerMultiTask('es6now', 'Compile ES6 to ES5.', function () {
@@ -29,10 +28,17 @@ module.exports = function (grunt) {
 			f.src.forEach(function (src) {
 				if (!grunt.file.exists(src)) {
 					grunt.fail.warn('File "' + src + '" not found.');
+					return;
+				}
+				var srcR = path.resolve(src);
+				var destR = path.join(path.resolve(f.dest), path.basename(src));
+				if (srcR === destR) {
+					grunt.fail.warn('Cannot overwrite "' + src + '".');
+					return;
 				}
 				jobs.push({
-					src: src,
-					dest: f.dest,
+					src: srcR,
+					dest: destR,
 					options: options
 				});
 			});
