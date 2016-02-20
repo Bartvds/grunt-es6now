@@ -46,6 +46,6 @@
     "jshint-path-reporter": "~0.1.3"
   },
   "peerDependencies": {
-    "grunt": "~0.4.1"
+    "grunt": ">=0.4.0"
   }
 }
